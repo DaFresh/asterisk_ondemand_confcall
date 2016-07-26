@@ -2,25 +2,25 @@ On Demand Conf Call Service
 
 
 
-Besoin client : sécuriser les chambres de conférences en permettant le changement des code PIN, et en facilité l'accès aux utilisateurs.
+Besoin client: securiser les chambres de conferences en permettant le changement des code PIN, et en facilite l'acces aux utilisateurs.
 
-La solution retenue se décompose en 2 SVIs, l¿un interne pour la réservation de salle, l¿autre sur une SDA publique pour y accéder :
--    SVI interne de réservation : son rôle est de distribuer aux utilisateurs les numéros et code PIN des salles de conférences. Le numéro est « virtuel » et ne peut être joint que via le SVI d¿accès. Chaque appel sur ce SVI se voit distribué un numéro de chambre de conférence et son code PIN, valable pendant 72h. (prévoir un système qui interdit à un même numéro de réserver plus de 5 conf call toute les)
--    SVI d¿accès publique (associé à une SDA) : il donne accès aux utilisateurs internes comme externes aux chambres de conférences, il suffit pour cela de composer un numéro de chambre de conférence et un code PIN correct.
+La solution retenue se decompose en 2 SVIs, leun interne pour la reservation de salle, leautre sur une SDA publique pour y accedere:
+-    SVI interne de reservatione: son rele est de distribuer aux utilisateurs les numeros et code PIN des salles de conferences. Le numero est eevirtuelee et ne peut etre joint que via le SVI deacces. Chaque appel sur ce SVI se voit distribue un numero de chambre de conference et son code PIN, valable pendant 72h. (prevoir un systeme qui interdit e un meme numero de reserver plus de 5 conf call toute les)
+-    SVI deacces publique (associe e une SDA)e: il donne acces aux utilisateurs internes comme externes aux chambres de conferences, il suffit pour cela de composer un numero de chambre de conference et un code PIN correct.
 
-Les réglages qui doivent être paramétrable : 
--    Numéro de SVI interne et externe
--    Les fichiers sons / lang des SVI : un pour chaque SVI => à détailler
--    La longeur du code PIN (de 4 à 8)
--    La durée de validité des chambres des numéros de conf (en jours de 1 à 14 j)
--    La plage de numéro interne des chambres de conférences et le context
--    La durée max d¿une conf call en heure:q
+Les reglages qui doivent etre parametrablee:
+-    Numero de SVI interne et externe
+-    Les fichiers sons / lang des SVIe: un pour chaque SVI => e detailler
+-    La longeur du code PIN (de 4 e 8)
+-    La duree de validite des chambres des numeros de conf (en jours de 1 e 14 j)
+-    La plage de numero interne des chambres de conferences et le context
+-    La duree max deune conf calleen heure:q
 
 
 
 Fonctions SVI internes :
-	- f_db_check : vérifie si la DB existe, si oui l'initialise ? DB_PATH
-	- f_db_clean_outdated : nettois les entrée obselète DB_PATH, MEETME_MAXDAYS
-	- f_db_find_free : trouve une chambre de conf call libre dans la plage indiquée, POOL_RANGE, FULL
+	- f_db_check : verifie si la DB existe, si oui l'initialise ? DB_PATH
+	- f_db_clean_outdated : nettois les entree obselete DB_PATH, MEETME_MAXDAYS
+	- f_db_find_free : trouve une chambre de conf call libre dans la plage indiquee, POOL_RANGE, FULL
 	- f_db_save : enregistre la conf call, le pin et le timestamp en DB
-	- f_return : renvois les infos a Asterisk, soit le numéro et le PIN, dispo, soit FULL
+	- f_return : renvois les infos a Asterisk, soit le numero et le PIN, dispo, soit FULL
