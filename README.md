@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # meetme-sefltservice
 
 
@@ -28,7 +27,3 @@ Fonctions SVI internes :
 	- f_db_find_free : trouve une chambre de conf call libre dans la plage indiquee, POOL_RANGE, FULL
 	- f_db_save : enregistre la conf call, le pin et le timestamp en DB
 	- f_return : renvois les infos a Asterisk, soit le numero et le PIN, dispo, soit FULL
-=======
-meetme-sefltservice
-# Hello World ! 
->>>>>>> ab93d21f0520e2c3d7b438ae57346b261244124c
