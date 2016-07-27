@@ -10,11 +10,11 @@ from random import randrange
 
 # === VAR definition ===
 DEBUG = 0
-db_path = '/Users/cedric_lemarchand/git/meetme-selfservice/sandbox/mod.db'
+db_path = '/Users/cedric_lemarchand/git/meetme-selfservice/mod.db'
 time_now = datetime.now()
-time_outdated = time_now - timedelta(seconds=10)
+time_outdated = time_now - timedelta(seconds=10) # room's timeout settings
 room_range = range(100,105) # use db_init() after changing this value
-random_pin = randrange(100000,999999) # to be improved with rstr
+random_pin = randrange(100000,999999) # rooms's range settings, to be improved with rstr module
 
 conn = sqlite3.connect(db_path)
 c = conn.cursor()
@@ -34,7 +34,6 @@ def db_drop():
 
 def db_init():
     "Create/re-create the db 'mod' and table 'mod'"
-    db_drop()
     c.execute("CREATE TABLE IF NOT EXISTS mod (room_number UNIQUE, pin, time_created DATE)" )
 
 def db_init_test_datas():
@@ -73,7 +72,7 @@ def db_clean():
 
 def db_find_free_room():
     for i in room_range:
-        #print "### i = %s" % i
+        if DEBUG : print "### i = ", i
         try:
             new_room = (i, random_pin, time_now)
             c.execute("INSERT INTO mod VALUES (?,?,?)", new_room )
@@ -84,12 +83,15 @@ def db_find_free_room():
         except sqlite3.IntegrityError:
             if DEBUG : print "### IntegrityError, table %s exist" % i
     else:
-        if DEBUG : print "### No more available room "
+        print "FULL"
+        if DEBUG : print "### No more available room"
 
-#db_init()
-if DEBUG: db_print_all()
+#db_drop()
+
+db_init()
 
 db_clean()
+
 db_find_free_room()
 
 conn.commit()
