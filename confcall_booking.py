@@ -1,18 +1,19 @@
 #!/usr/bin/python
 
-import sqlite3
 import os
 import sys
 import time
+import sqlite3
 import datetime
 from datetime import datetime, timedelta
 from random import randrange
 
+
 # === VAR definition ===
-DEBUG = 0
+DEBUG = 1
 db_path = '/Users/cedric_lemarchand/git/meetme-selfservice/mod.db'
 time_now = datetime.now()
-time_outdated = time_now - timedelta(seconds=10) # room's timeout settings
+time_outdated = time_now - timedelta(seconds=3600) # room's timeout settings
 room_range = range(100,105) # use db_init() after changing this value
 random_pin = randrange(100000,999999) # rooms's range settings, to be improved with rstr module
 
@@ -86,13 +87,50 @@ def db_find_free_room():
         print "FULL"
         if DEBUG : print "### No more available room"
 
+def db_check_pin():
+    "Find related pin"
+    if DEBUG : print "Looking for pin of room %s" % room_number
+    #c.execute("SELECT pin FROM mod WHERE room_number = '%s'" % room_number)
+    c.execute("SELECT pin FROM mod WHERE room_number= %s " % room_number)
+    pin = c.fetchone()
+    if (not pin):
+        if DEBUG: print "No pin found for room %s, seems room did not exist" % room_number
+        print "NOK"
+    if pin:
+        if DEBUG: print "pin = %s, user_pin = %s" % (pin, user_pin)
+        if (pin == user_pin): print "OK"
+        else: print "NOK"
+    else:
+        if DEBUG: print "Error"
+
+# === Booking mode ===
+if len(sys.argv) == 1:
+    db_clean()
+    db_find_free_room()
+    conn.close()
+    sys.exit()
+
+# === Checking mode ===
+if len(sys.argv) == 3:
+    room_number = sys.argv[1]
+    user_pin = sys.argv[2]
+    db_clean()
+    db_check_pin()
+    conn.close()
+    sys.exit()
+
+else: print "Error, unsupported usage"
+
+
+
+
 #db_drop()
 
-db_init()
+#db_init()
 
-db_clean()
+#db_clean()
 
-db_find_free_room()
+#db_find_free_room()
 
-conn.commit()
-conn.close()
+#conn.commit()
+#conn.close()
