@@ -1,0 +1,3 @@
+- arguments sanitisation
+- manage error exits inside function
+- if (not room_pin) dont work anymore

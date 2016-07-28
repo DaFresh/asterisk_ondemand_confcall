@@ -10,7 +10,7 @@ from random import randrange
 
 
 # === VAR definition ===
-DEBUG = 1
+DEBUG = 0
 db_path = '/Users/cedric_lemarchand/git/meetme-selfservice/mod.db'
 time_now = datetime.now()
 time_outdated = time_now - timedelta(seconds=3600) # room's timeout settings
@@ -91,24 +91,32 @@ def db_check_pin():
     "Find related pin"
     if DEBUG : print "Looking for pin of room %s" % room_number
     #c.execute("SELECT pin FROM mod WHERE room_number = '%s'" % room_number)
-    c.execute("SELECT pin FROM mod WHERE room_number= %s " % room_number)
-    pin = c.fetchone()
-    if (not pin):
+    cursor = c.execute("SELECT pin FROM mod WHERE room_number= %s " % room_number)
+
+    for row in cursor:
+        room_pin = row[0]
+
+    if room_pin:
+        if DEBUG: print "room_pin = %s, user_pin = %s" % (room_pin, user_pin)
+        print "room_pin = '%s', user_pin = '%s'" % (room_pin, user_pin)
+        if (room_pin == user_pin): print "OK"
+        if (room_pin != user_pin): print "NOK"
+
+    if (not room_pin) :
         if DEBUG: print "No pin found for room %s, seems room did not exist" % room_number
         print "NOK"
-    if pin:
-        if DEBUG: print "pin = %s, user_pin = %s" % (pin, user_pin)
-        if (pin == user_pin): print "OK"
-        else: print "NOK"
+
     else:
         if DEBUG: print "Error"
+
+if DEBUG: db_print_all()
 
 # === Booking mode ===
 if len(sys.argv) == 1:
     db_clean()
     db_find_free_room()
     conn.close()
-    sys.exit()
+    sys.exit(0)
 
 # === Checking mode ===
 if len(sys.argv) == 3:
@@ -117,9 +125,11 @@ if len(sys.argv) == 3:
     db_clean()
     db_check_pin()
     conn.close()
-    sys.exit()
+    sys.exit(0)
 
-else: print "Error, unsupported usage"
+else:
+    print "Error, unsupported usage"
+    sys.exit(1)
 
 
 
