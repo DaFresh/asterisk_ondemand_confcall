@@ -8,23 +8,16 @@ import datetime
 from datetime import datetime, timedelta
 from random import randrange
 
-
 # === VAR definition ===
 DEBUG = 0
 db_path = '/Users/cedric_lemarchand/git/meetme-selfservice/mod.db'
 time_now = datetime.now()
-time_outdated = time_now - timedelta(seconds=3600) # room's timeout settings
+time_outdated = time_now - timedelta(seconds=1) # room's timeout settings
 room_range = range(100,105) # use db_init() after changing this value
 random_pin = randrange(100000,999999) # rooms's range settings, to be improved with rstr module
 
 conn = sqlite3.connect(db_path)
 c = conn.cursor()
-
-time_minus_1h = time_now - timedelta(hours=1)
-time_minus_2h = time_now - timedelta(hours=2)
-time_minus_3h = time_now - timedelta(hours=3)
-time_minus_4h = time_now - timedelta(hours=4)
-
 
 # === FUNC definition ===
 def db_drop():
@@ -39,6 +32,11 @@ def db_init():
 
 def db_init_test_datas():
     "Put some data for testing purpose"
+    time_minus_1h = time_now - timedelta(hours=1)
+    time_minus_2h = time_now - timedelta(hours=2)
+    time_minus_3h = time_now - timedelta(hours=3)
+    time_minus_4h = time_now - timedelta(hours=4)
+
     test_datas = [('100', '123456', time_minus_1h),
                     ('101', '123456', time_minus_2h),
                     ('102', '123456', time_minus_3h),
@@ -47,7 +45,6 @@ def db_init_test_datas():
     c.executemany("INSERT INTO mod VALUES (?,?,?)", test_datas )
     conn.commit()
     return
-
 
 def db_print_all():
     "Print all db content"
@@ -60,16 +57,10 @@ def db_print_all():
 
 def db_clean():
     "Remove oudated entry, cf 'time_outdated' variable "
-    #print "time_now = %s" % time_now
-    #print "time_outdated = %s" % time_outdated
-    #time_diff = time_now - time_outdated
-    #print "NOW - OUTDATE %s" % time_diff
     c.execute("SELECT * FROM mod WHERE time_created < '%s' " % time_outdated )
     if DEBUG: print "### Deleted outdated row : %s" % c.fetchall()
     c.execute("DELETE FROM mod WHERE time_created < '%s' " % time_outdated )
     conn.commit()
-    #print "### AFTER DEL"
-    #db_print_all()
 
 def db_find_free_room():
     for i in room_range:
@@ -92,22 +83,24 @@ def db_check_pin():
     if DEBUG : print "Looking for pin of room %s" % room_number
     #c.execute("SELECT pin FROM mod WHERE room_number = '%s'" % room_number)
     cursor = c.execute("SELECT pin FROM mod WHERE room_number= %s " % room_number)
+    #print cursor.in_transaction
+    #print sqlite3.complete_statement("SELECT pin FROM mod WHERE room_number= %s " % room_number)
+    data = cursor.fetchall()
 
-    for row in cursor:
-        room_pin = row[0]
-
-    if room_pin:
-        if DEBUG: print "room_pin = %s, user_pin = %s" % (room_pin, user_pin)
-        print "room_pin = '%s', user_pin = '%s'" % (room_pin, user_pin)
-        if (room_pin == user_pin): print "OK"
-        if (room_pin != user_pin): print "NOK"
-
-    if (not room_pin) :
-        if DEBUG: print "No pin found for room %s, seems room did not exist" % room_number
+    if (len(data) == 0):
         print "NOK"
-
+        if DEBUG: print "No pin found for room %s, seems room did not exist" % room_number
+    elif (len(data) == 1):
+        for row in data:
+            #print len(row)
+            if row:
+                room_pin = str(row[0])
+                if DEBUG: print "room_pin = %s, user_pin = %s" % (room_pin, user_pin)
+                if (room_pin == user_pin): print "OK"
+                if (room_pin != user_pin): print "NOK"
     else:
-        if DEBUG: print "Error"
+            if DEBUG: print "Error"
+            print "NOK ???"
 
 if DEBUG: db_print_all()
 
@@ -116,31 +109,23 @@ if len(sys.argv) == 1:
     db_clean()
     db_find_free_room()
     conn.close()
-    sys.exit(0)
+    #sys.exit(0)
 
 # === Checking mode ===
-if len(sys.argv) == 3:
-    room_number = sys.argv[1]
-    user_pin = sys.argv[2]
+elif len(sys.argv) == 3:
+    room_number = str(sys.argv[1])
+    user_pin = str(sys.argv[2])
     db_clean()
     db_check_pin()
     conn.close()
-    sys.exit(0)
-
+    #sys.exit(0)
 else:
     print "Error, unsupported usage"
-    sys.exit(1)
-
-
-
+    sys.exit(2)
 
 #db_drop()
-
 #db_init()
-
 #db_clean()
-
 #db_find_free_room()
-
 #conn.commit()
 #conn.close()
