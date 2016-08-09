@@ -13,7 +13,7 @@ DEBUG = 0
 #db_path = '/tmp/mod.db'
 db_path = '/tmp/mod.db'
 time_now = datetime.now()
-time_outdated = time_now - timedelta(seconds=1) # room's timeout settings
+time_outdated = time_now - timedelta(seconds=600) # room's timeout settings
 room_range = range(100,105) # use db_init() after changing this value
 random_pin = randrange(100000,999999) # rooms's range settings, to be improved with rstr module
 

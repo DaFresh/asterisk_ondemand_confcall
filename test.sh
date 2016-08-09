@@ -1,29 +1,30 @@
 #!/bin/bash
 # set timeout to 600
+FILE='./ondemand_confcall.py'
 
 while true ; do
 
 clear 
 echo "### ask for 6 new rooms, should end with FULL: "
-./confcall_booking.py
-./confcall_booking.py
-DATA=$(./confcall_booking.py)
+$FILE
+$FILE
+DATA=$FILE
 echo $DATA
-./confcall_booking.py
-./confcall_booking.py
-./confcall_booking.py
+$FILE
+$FILE
+$FILE
 
 echo "### ask for a new room, should be FULL: "
-./confcall_booking.py
+$FILE
 
 echo "### room check, good pin, should be OK : "
-./confcall_booking.py $DATA
+$FILE $DATA
 
 echo "### room check, wrong pin, should be NOK : "
-./confcall_booking.py 100 123456
+$FILE 100 123456
 
 echo "### room check, wrong room number, should be NOK : "
-./confcall_booking.py 999 123456
+$FILE 999 123456
 
 sleep 3
 done
