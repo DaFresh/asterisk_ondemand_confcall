@@ -1,6 +1,5 @@
 - arguments sanitisation
-- manage error exits inside function
-- if (not room_pin) dont work anymore => test with len() or sqlite3.complete_statement
-- if (room_pin == user_pin): print "OK" dont work
+- manage errors exit inside function
+- script failed when no DB (first time exec)
 - clean fonction
 - debug as an argument

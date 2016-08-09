@@ -50,7 +50,6 @@ def db_print_all():
     "Print all db content"
     print "### DEBUG PRINT ALL:"
     c.execute("SELECT * FROM mod")
-    #print c.fetchall()
     for row in c:
         print row
     return
@@ -75,7 +74,7 @@ def db_find_free_room():
         except sqlite3.IntegrityError:
             if DEBUG : print "### IntegrityError, table %s exist" % i
     else:
-        print "FULL"
+        print 'SET VARIABLE STATUS "FULL"'
         if DEBUG : print "### No more available room"
 
 def db_check_pin():
@@ -88,7 +87,7 @@ def db_check_pin():
     data = cursor.fetchall()
 
     if (len(data) == 0):
-        print "NOK"
+        print 'SET VARIABLE STATUS "NOK"'
         if DEBUG: print "No pin found for room %s, seems room did not exist" % room_number
     elif (len(data) == 1):
         for row in data:
@@ -96,16 +95,17 @@ def db_check_pin():
             if row:
                 room_pin = str(row[0])
                 if DEBUG: print "room_pin = %s, user_pin = %s" % (room_pin, user_pin)
-                if (room_pin == user_pin): print "OK"
-                if (room_pin != user_pin): print "NOK"
+                if (room_pin == user_pin): print 'SET VARIABLE STATUS "OK"'
+                if (room_pin != user_pin): print 'SET VARIABLE STATUS "NOK"'
     else:
             if DEBUG: print "Error"
-            print "NOK ???"
+            print 'SET VARIABLE STATUS "OK"'
 
 if DEBUG: db_print_all()
 
 # === Booking mode ===
 if len(sys.argv) == 1:
+    db_init()
     db_clean()
     db_find_free_room()
     conn.close()
