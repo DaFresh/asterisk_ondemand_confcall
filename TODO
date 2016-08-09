@@ -9,3 +9,4 @@
 - naming uniformisation
 - rename git project
 - put DB in /var/lib/asterisk with .sqlite3
+
