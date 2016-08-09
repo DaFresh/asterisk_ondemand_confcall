@@ -1,6 +1,6 @@
 # Asterisk OnDemand ConfCall Service
 
-** Provides on demand conferences room number and pin to users. **
+**Provides on demand conferences room number and pin to users.**
 
 ## Introduction 
 This is done via 2 files :
@@ -34,7 +34,7 @@ This is done via 2 files :
 
 ### Recommendations and tips :
 
-- the booking macro should only be accessible via internal extention.
+- the booking macro should only be accessible via an internal extention.
 - the DB file is automaticaly created on the first launch of the script
 - if the python script in initialy lanched in root, permitions on the DB file need to be adjusted (or remove the db file)
 - adjust 'room_range' 
