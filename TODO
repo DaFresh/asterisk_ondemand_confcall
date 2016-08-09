@@ -4,3 +4,8 @@
 - debug as an argument
 - better arguments handeling
 - improve random_pin for easyer settings
+- put settings variables in a separated .conf file
+- AGI path as variable
+- naming uniformisation
+- rename git project
+- put DB in /var/lib/asterisk with .sqlite3

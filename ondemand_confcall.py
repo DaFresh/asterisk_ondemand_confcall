@@ -71,8 +71,7 @@ def db_find_free_room():
             print 'SET VARIABLE STATUS "OK"'
             print 'SET VARIABLE ROOM_NUMBER "%s"' % i
             print 'SET VARIABLE ROOM_PIN "%s"' % random_pin
-            print i, random_pin
-            if DEBUG: print "### New room created with : ", new_room
+            if DEBUG: print "### New room created with number %s and pin %s : " % (i, random_pin)
             conn.commit()
             break
         except sqlite3.IntegrityError:
