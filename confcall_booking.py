@@ -10,7 +10,8 @@ from random import randrange
 
 # === VAR definition ===
 DEBUG = 0
-db_path = '/Users/cedric_lemarchand/git/meetme-selfservice/mod.db'
+#db_path = '/tmp/mod.db'
+db_path = '/tmp/mod.db'
 time_now = datetime.now()
 time_outdated = time_now - timedelta(seconds=1) # room's timeout settings
 room_range = range(100,105) # use db_init() after changing this value
@@ -67,6 +68,9 @@ def db_find_free_room():
         try:
             new_room = (i, random_pin, time_now)
             c.execute("INSERT INTO mod VALUES (?,?,?)", new_room )
+            print 'SET VARIABLE STATUS "OK"'
+            print 'SET VARIABLE ROOM_NUMBER "%s"' % i
+            print 'SET VARIABLE ROOM_PIN "%s"' % random_pin
             print i, random_pin
             if DEBUG: print "### New room created with : ", new_room
             conn.commit()
@@ -91,7 +95,6 @@ def db_check_pin():
         if DEBUG: print "No pin found for room %s, seems room did not exist" % room_number
     elif (len(data) == 1):
         for row in data:
-            #print len(row)
             if row:
                 room_pin = str(row[0])
                 if DEBUG: print "room_pin = %s, user_pin = %s" % (room_pin, user_pin)

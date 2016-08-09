@@ -1,5 +1,6 @@
 - arguments sanitisation
-- manage errors exit inside function
-- script failed when no DB (first time exec)
-- clean fonction
+- manage error exits inside function
+- clean fonction as an argument
 - debug as an argument
+- better arguments handeling
+- improve random_pin for easyer settings
