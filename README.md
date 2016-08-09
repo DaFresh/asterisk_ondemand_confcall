@@ -24,11 +24,20 @@ Requirements :
 Installation :
 
 - put the python script in /var/lib/asterisk/agi-bin/
-- adjust db_path, room_range and random_pin to you convenience. (db file need to be writable by Asterisk)
-- include the ondemand_conf_call.conf in your dial plan and point 2 extentions to both macro :
-	- exten = 888,1,Macro(meetme_book)
-	- exten = 888,1,Macro(meetme_book)
+- adjust db_path, room_range and random_pin, and time_outdated to you convenience. (db file need to be writable by Asterisk)
+- include the ondemand_conf_call.conf in your dial plan and give 2 extentions to both macro, for exemple :
+	- exten = 666,1,Macro(ondemand_confcall_booking)
+	- exten = +33123456789,1,Macro(ondemand_confcall_access)
 
-As a recommendation, the booking macro should only be accessible via internal extention.
+Recommendations and tips :
+
+- the booking macro should only be accessible via internal extention.
+- the DB file is automaticaly created on the first launch of the script
+- if the python script in initialy lanched in root, permitions on the DB file need to be adjusted (or remove the db file)
+- adjust 'room_range' 
+
+Use :
+
+- call the  
 
 Enjoy
