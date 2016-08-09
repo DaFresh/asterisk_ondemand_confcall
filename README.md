@@ -24,7 +24,7 @@ Requirements :
 Installation :
 
 - put the python script in /var/lib/asterisk/agi-bin/
-- adjust db_path, room_range and random_pin, and time_outdated to you convenience. (db file need to be writable by Asterisk)
+- adjust db_path, room_range, random_pin, and time_outdated to you convenience. (db file need to be writable by Asterisk)
 - include the ondemand_conf_call.conf in your dial plan and give 2 extentions to both macro, for exemple :
 	- exten = 666,1,Macro(ondemand_confcall_booking)
 	- exten = +33123456789,1,Macro(ondemand_confcall_access)
@@ -38,6 +38,7 @@ Recommendations and tips :
 
 Use :
 
-- call the  
+- call the ondemand_confcall_booking extension to get a room number and the corresponding pin number
+- call the ondemand_confcall_access extension, give a valid room and pin number to access conference room
 
 Enjoy
